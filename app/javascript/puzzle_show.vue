@@ -1,118 +1,51 @@
 <template>
-
-  <table class="sudoku" data-command="sudoku" data-id="2964">
-    <tbody>
-      <tr class="border-top">
-        <td class="fill border-left">2</td>
-        <td class="fill">5</td>
-        <td class="empty border-right focus"></td>
-        <td class="empty"></td>
-        <td class="empty"></td>
-        <td class="empty border-right"></td>
-        <td class="empty"></td>
-        <td class="empty"></td>
-        <td class="empty border-right"></td>
+  <div id="app" class="puzzles-show-page">
+    <table class="sudoku-table"> 
+      <tr v-for="i in 9">
+        <td v-for="j in 9">
+          {{ currentPuzzle[i-1][j-1] }}
+        </td>
       </tr>
-      <tr>
-        <td class="empty border-left"></td>
-        <td class="empty"></td>
-        <td class="empty border-right"></td>
-        <td class="empty"></td>
-        <td class="fill">1</td>
-        <td class="empty border-right"></td>
-        <td class="fill">6</td>
-        <td class="fill">2</td>
-        <td class="fill border-right">9</td>
-      </tr>
-      <tr class="border-bottom">
-        <td class="empty border-left"></td>
-        <td class="empty"></td>
-        <td class="fill border-right">6</td>
-        <td class="empty"></td>
-        <td class="fill">8</td>
-        <td class="empty border-right"></td>
-        <td class="empty"></td>
-        <td class="fill">5</td>
-        <td class="fill border-right">1</td>
-      </tr>
-      <tr>
-        <td class="fill border-left">5</td>
-        <td class="fill">1</td>
-        <td class="fill border-right">2</td>
-        <td class="empty"></td>
-        <td class="fill">6</td>
-        <td class="fill border-right">7</td>
-        <td class="fill">9</td>
-        <td class="empty"></td>
-        <td class="empty border-right"></td>
-      </tr>
-      <tr>
-        <td class="empty border-left"></td>
-        <td class="empty" ></td>
-        <td class="empty border-right"></td>
-        <td class="empty"></td>
-        <td class="empty"></td>
-        <td class="empty border-right"></td>
-        <td class="empty"></td>
-        <td class="fill">4</td>
-        <td class="fill border-right">5</td>
-      </tr>
-      <tr class="border-bottom">
-        <td class="empty border-left"></td>
-        <td class="empty" ></td>
-        <td class="fill border-right">7</td>
-        <td class="fill">8</td>
-        <td class="empty" ></td>
-        <td class="fill border-right">3</td>
-        <td class="empty" ></td>
-        <td class="empty" ></td>
-        <td class="empty border-right" ></td>
-      </tr>
-      <tr>
-        <td class="fill border-left">1</td>
-        <td class="fill">2</td>
-        <td class="empty border-right" ></td>
-        <td class="fill">3</td>
-        <td class="empty" ></td>
-        <td class="empty border-right" ></td>
-        <td class="empty" ></td>
-        <td class="empty" ></td>
-        <td class="empty border-right" ></td>
-      </tr>
-      <tr>
-        <td class="empty border-left"></td>
-        <td class="empty"></td>
-        <td class="empty border-right"></td>
-        <td class="fill">6</td>
-        <td class="fill">4</td>
-        <td class="empty border-right"></td>
-        <td class="fill">1</td>
-        <td class="empty" ></td>
-        <td class="empty border-right"></td>
-      </tr>
-      <tr class="border-bottom">
-        <td class="empty border-left"></td>
-        <td class="fill">4</td>
-        <td class="fill border-right">3</td>
-        <td class="fill">5</td>
-        <td class="empty" ></td>
-        <td class="empty border-right" ></td>
-        <td class="fill">9</td>
-        <td class="empty"></td>
-        <td class="fill border-right">7</td>
-      </tr>
-    </tbody>
-  </table>
-  
+    </table>
+  </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
-  
+  data: function () {
+    return {
+      currentPuzzle: [
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0]
+      ]
+    }
+  },
+  created: function () {
+    axios.get(`/api/v1/puzzles/${location.pathname.match(/\d+/)[0]}`)
+      .then(res => this.currentPuzzle = res.data )
+  },
+  computed: {
+    currentPuzzleToBlank: function () {
+      return this.currentPuzzle.map(function(tr){
+        return tr.map(function(td){
+          if (td == 0) {return ""}
+          return td
+        })
+      })
+    }
+  }
 }
 </script>
 
-<style>
+<style lang="scss">
   table {
     border-collapse:collapse;
     border: solid;
@@ -122,19 +55,19 @@ export default {
   td {
     border: 1px solid #3333;
     text-align: center;
+    width: 50px;
+    height: 50px;
   }
 
-  .sudoku {
-    width: 500px;
-    height: 500px;
+  .sudoku-table {
     margin: auto;
   }
 
-  .border-bottom {
+  tr:nth-child(3),tr:nth-child(6) {
     border-bottom: solid;
   }
 
-  .border-right {
+  td:nth-child(3),td:nth-child(6) {
     border-right: solid;
   }
 

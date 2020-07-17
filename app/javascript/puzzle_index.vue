@@ -4,7 +4,7 @@
       <table class="sudoku-table"> 
         <tr v-for="i in 9">
           <td v-for="j in 9">
-            {{ currentPuzzle[i-1][j-1] }}
+            {{ currentPuzzleToBlank[i-1][j-1] }}
           </td>
         </tr>
       </table>
@@ -13,13 +13,14 @@
       <li
         v-for="(puzzle, index) in puzzles" 
         :key="puzzle.id" 
-        @click="changePuzzle(index)"
+        @mouseover="changePuzzle(index)"
+        v-bind:class="{selected:currentPuzzleId===index}"
         class="puzzle-card"
       >
         <p>
           レベル{{ index }}
         </p>
-        <a href="/puzzles/id" class="btn">Play</a>
+        <a v-bind:href="'/puzzles/'+index" class="btn">Play</a>
       </li>
     </ul>
   </div>
@@ -51,40 +52,74 @@ export default {
   },
   methods: {
     changePuzzle: function (puzzleId) {
+      this.currentPuzzleId = puzzleId 
       axios.get(`/api/v1/puzzles/${puzzleId}`)
         .then(res => this.currentPuzzle = res.data)
     }
   },
+  computed: {
+    currentPuzzleToBlank: function () {
+      return this.currentPuzzle.map(function(tr){
+        return tr.map(function(td){
+          if (td == 0) {return ""}
+          return td
+        })
+      })
+    }
+  }
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 .puzzles-index-page {
   display: flex;
   height: 100%;
   .preview-puzzle {
-    width: 40%;
+    width: 50%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    table {
+      padding: 60px;
+      border-collapse: collapse;
+      border: solid;
+      background: #fff;
+    }
+
+    td {
+      width: 50px;
+      height: 50px;
+      border: 1px solid #3333;
+      text-align: center;
+    }
+
+    tr:nth-child(3),tr:nth-child(6) {
+      border-bottom: solid;
+    }
+
+    td:nth-child(3),td:nth-child(6) {
+      border-right: solid;
+    }
   }
   .puzzle-cards {
-    width: 60%;
+    width: 50%;
     height: 100%;
     list-style: none;
     display: flex;
     flex-flow: column;
     align-items: center;
-    padding: 100px;
+    padding: 100px 50px;
     overflow: scroll;
+    
     .puzzle-card {
-      border-top: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
-      border-radis: 10px;
+      border-top: 1px solid #888;
+      border-bottom: 1px solid #888;
       background: linear-gradient(315deg, #263b6f, #b873f76b);
-      box-shadow: -20px -20px 60px #24304e, 20px 20px 60px #364a75;
-      width: 80%;
       height: 100px;
+      border-radis: 10px;
+      width: 100%;
       margin-bottom: 30px;
-
       display: flex;
       justify-content: space-around;
       align-items: center;
@@ -105,6 +140,11 @@ export default {
         text-shadow: none;
       }
     }
+    .selected{
+      background: linear-gradient(315deg, #263b6f, #73f7836b);
+    }
   }
+
+  
 }
 </style>

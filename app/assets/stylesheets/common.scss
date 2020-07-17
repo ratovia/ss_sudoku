@@ -6,12 +6,15 @@ html, body{
 }
 
 body{
-  background-color: $bg-color;
+  background-color: #fff;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .wrapper{
-  background-color: $bg-color;
+  background-color: #fff;
   width: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 

@@ -3,7 +3,7 @@
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
 .welcome-index-page {
-  background-color: $bg-color;
+  background-color: #ffffff00;
   margin: 0 auto;
   display: flex;
   flex-flow: column;
@@ -40,8 +40,7 @@
   .btn{
     border-radius: 27px;
     background: linear-gradient(145deg, #5879c7, #25458e);
-    box-shadow:  23px 23px 55px #1f2a44, 
-             -23px -23px 55px #354874;
+    box-shadow:  5px 5px 30px #1f2a44 
   }
 }
   
