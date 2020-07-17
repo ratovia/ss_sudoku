@@ -1,0 +1,10 @@
+-#.wrapper
+-#  .puzzles-index-page
+-#    .preview-puzzle
+-#    %ul.puzzle-cards
+-#      - @puzzles.each_with_index do |puzzle, i|
+-#        %li.puzzle-card
+-#          %p
+-#            = "レベル#{i}"
+-#          = link_to "Play", puzzle_path(puzzle.id), class: "btn"
+= javascript_pack_tag 'puzzle_index', 'data-turbolinks-track': 'reload'
