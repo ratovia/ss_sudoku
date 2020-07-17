@@ -4,14 +4,14 @@
       <table class="sudoku-table"> 
         <tr v-for="i in 9">
           <td v-for="j in 9">
-            {{ filterCurrentPuzzle[i][j] }}
+            {{ currentPuzzle[i-1][j-1] }}
           </td>
         </tr>
       </table>
     </div>
     <ul class="puzzle-cards">
       <li
-        v-for="(puzzle, index) in puzzles.question_array" 
+        v-for="(puzzle, index) in puzzles" 
         :key="puzzle.id" 
         @click="changePuzzle(index)"
         class="puzzle-card"
@@ -31,24 +31,30 @@ export default {
   data: function () {
     return {
       currentPuzzleId: 1,
-      puzzles: []
+      puzzles: [],
+      currentPuzzle: [
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0]
+      ]
     }
   },
-  mounted: function () {
+  created: function () {
     axios.get("/api/v1/puzzles")
       .then(res => this.puzzles = res.data )
   },
   methods: {
     changePuzzle: function (puzzleId) {
-      this.currentPuzzleId = puzzleId
+      axios.get(`/api/v1/puzzles/${puzzleId}`)
+        .then(res => this.currentPuzzle = res.data)
     }
   },
-  computed: {
-    filterCurrentPuzzle: function () {
-      console.log(this.puzzles)
-      return this.puzzles[this.currentPuzzleId]
-    },
-  }
 }
 </script>
 
@@ -74,7 +80,7 @@ export default {
       border-bottom: 1px solid #ccc;
       border-radis: 10px;
       background: linear-gradient(315deg, #263b6f, #b873f76b);
-    box-shadow: -20px -20px 60px #24304e, 20px 20px 60px #364a75;
+      box-shadow: -20px -20px 60px #24304e, 20px 20px 60px #364a75;
       width: 80%;
       height: 100px;
       margin-bottom: 30px;
