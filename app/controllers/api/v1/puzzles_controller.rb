@@ -15,7 +15,6 @@ class Api::V1::PuzzlesController < ApplicationController
 
   def answer
     puzzle = Puzzle.find(params[:id])
-    binding.pry
     if params[:data] == puzzle.answer
       render json: true
     else
