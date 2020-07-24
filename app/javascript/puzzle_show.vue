@@ -19,11 +19,19 @@
         </td>
       </tr>
     </table>
+    <button v-on:click="sendAnswer" class="sudoku-answer">SUBMIT</button>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
+
+
 export default {
   data: function () {
     return {
@@ -60,6 +68,21 @@ export default {
         this.currentPuzzle[i][j] = 0
         e.target.value = ""
       }
+    },
+
+    sendAnswer: function() {
+      // 二次元配列を一次元配列に変換 => joinで繋げる
+      let changePuzzle = Array.prototype.concat.apply([],this.currentPuzzle).join("")
+      axios.post(`/api/v1/puzzles/${location.pathname.match(/\d+/)[0]}/answer`, { data: changePuzzle })
+        .then(res => {
+          //戻り値は true false
+          console.log(JSON.stringify(res.data))
+          if ( res.data == true ) {
+            alert("正解です！")
+          } else {
+            alert("不正解です！")
+          };
+        })
     }
   },
   computed: {
@@ -76,6 +99,7 @@ export default {
 </script>
 
 <style lang="scss">
+
   table {
     border-collapse:collapse;
     border: solid;
@@ -126,5 +150,17 @@ export default {
   }
   input[type="number"] {
     -moz-appearance:textfield;
+  }
+  .sudoku-answer {
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    color: white;
+    width: 300px;
+    height: 64px;
+    margin: 30px auto;
+    font-size: 30px;
+    letter-spacing: 0.3rem;
+    line-height: 64px;
   }
 </style>

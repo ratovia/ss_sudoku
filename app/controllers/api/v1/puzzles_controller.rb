@@ -12,4 +12,13 @@ class Api::V1::PuzzlesController < ApplicationController
     end
     render json: puzzle_array
   end
+
+  def answer
+    puzzle = Puzzle.find(params[:id])
+    if params[:data] == puzzle.answer
+      render json: true
+    else
+      render json: false
+    end
+  end
 end
