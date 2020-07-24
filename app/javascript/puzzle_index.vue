@@ -18,9 +18,9 @@
         class="puzzle-card"
       >
         <p>
-          レベル{{ index }}
+          レベル{{ index+1 }}
         </p>
-        <a v-bind:href="'/puzzles/'+index" class="btn">Play</a>
+        <a v-bind:href="'/puzzles/'+puzzle.id" class="btn">Play</a>
       </li>
     </ul>
   </div>
