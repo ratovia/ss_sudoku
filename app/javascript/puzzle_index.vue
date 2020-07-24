@@ -11,10 +11,10 @@
     </div>
     <ul class="puzzle-cards">
       <li
-        v-for="(puzzle, index) in puzzles" 
+        v-for="puzzle in puzzles" 
         :key="puzzle.id" 
-        @mouseover="changePuzzle(index)"
-        v-bind:class="{selected:currentPuzzleId===index}"
+        @mouseover="changePuzzle(puzzle.id)"
+        v-bind:class="{selected:currentPuzzleId===puzzle.id}"
         class="puzzle-card"
       >
         <p>
