@@ -14,7 +14,6 @@ class Api::V1::PuzzlesController < ApplicationController
   end
 
   def answer
-    # binding.pry
     puzzle = Puzzle.find(params[:id])
     binding.pry
     if params[:data] == puzzle.answer
